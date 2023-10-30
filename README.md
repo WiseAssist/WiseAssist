@@ -1,6 +1,6 @@
 # WiseAssist- Your Tech Assistant platform
 
-Welcome to the **InklyReads** project on GitHub!
+Welcome to the **WiseAssist** project on GitHub!
 
 ## Project Description
 
