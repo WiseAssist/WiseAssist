@@ -1,110 +1,68 @@
-const db = require("../config");
+const db = require('../config');
+const jwt = require('jsonwebtoken');
+const User = {};
 
-const Course = {};
+User.checkUserExistence = async (email, user_name, phonenumber) => {
+    const checkEmail = await db.query('SELECT * FROM users WHERE email = $1;', [email]);
+    const checkUsername = await db.query('SELECT * FROM users WHERE user_name = $1;', [user_name]);
+    const checkPhone = await db.query('SELECT * FROM users WHERE phonenumber = $1;', [phonenumber]);
 
-Course.allelderliescourses = async () => {
-  try {
-    const queryResult = await db.query(
-      "SELECT courses.id, courses.title,courses.description, courses.detail, courses.trainer,  categories.category, courses.course_time, courses.site FROM courses INNER JOIN categories ON categories.id = courses.category_id;"
-    );
+    if (checkEmail.rows.length > 0) {
+    throw new Error("invalid email");
+    }
+    if (checkUsername.rows.length > 0) {
+    throw new Error("invalid username");
+    }
+    if (checkPhone.rows.length > 0) {
+    throw new Error("invalid phonenumber");
+    }
 
-    const formattedResult = queryResult.rows.map((row) => {
-      row.course_time = row.course_time.toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-      });
-      return row;
-    });
+    return true; 
+    };
+    User.register= async (first_name,last_name,user_name, email, hashPassword,phonenumber)=>{
+    
+        try {
+        
+            const result = await db.query('INSERT INTO users(first_name,last_name,user_name, email, password, phonenumber) VALUES($1, $2, $3, $4, $5, $6) RETURNING *', [first_name,last_name,user_name, email, hashPassword,phonenumber]);
+            console.log(result);
+            return result.rows[0];
+            
+    
 
-    return formattedResult;
-  } catch (err) {
-    throw err;
-  }
+    } catch (err) {
+        throw err;
+    }
+}
+
+User.login = async (email) => {
+    try {
+      const user = await db.query('SELECT users.id, email,user_name, roles.role  FROM users inner join roles on roles.id = users.role_id WHERE email = $1 And users.is_deleted= false;', [email]);
+      if (user.rows[0]) {
+        return user.rows[0];
+      } else {
+        return "Email not found or user is deleted.";
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+User.checkconfirm = async (userID) => {
+    try {
+        const result = await db.query('UPDATE users SET role_id = 1 WHERE id = $1 RETURNING *', [userID]);
+        return result[0]; 
+      } catch (err) {
+        throw err;
+      }
 };
 
-Course.onsiteelderliescourses = async () => {
-  try {
-    const queryResult = await db.query(
-      "SELECT courses.id, courses.title,courses.description, courses.detail, courses.trainer, categories.category ,courses.course_time FROM courses  INNER JOIN categories ON categories.id = courses.category_id  where courses.category_id = 1;"
-    );
 
-    const formattedResult = queryResult.rows.map((row) => {
-      row.course_time = row.course_time.toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-      });
-      return row;
-    });
-
-    return formattedResult;
-  } catch (err) {
-    throw err;
-  }
-};
-
-Course.onlineelderliescourses = async () => {
-  try {
-    const queryResult = await db.query(
-      "SELECT courses.id, courses.title,courses.description, courses.detail, courses.trainer, categories.category,courses.course_time   FROM courses  INNER JOIN categories ON categories.id = courses.category_id  where courses.category_id = 2;"
-    );
-
-    return queryResult.rows;
-  } catch (err) {
-    throw err;
-  }
-};
-
-Course.coursedetail = async (courseId) => {
-  try {
-    const queryResult = await db.query(
-      "SELECT courses.id, courses.title, courses.image,courses.detail, courses.site,courses.course_time , courses.trainer,categories.category FROM courses  inner join categories on categories.id = courses.category_id  where courses.id = $1;",
-      [courseId]
-    );
-    const formattedResult = queryResult.rows.map((row) => {
-      row.course_time = row.course_time.toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-      });
-      return row;
-    });
-    return formattedResult;
-  } catch (err) {
-    throw err;
-  }
-};
-
-Course.alllessons = async (courseID) => {
-  try {
-    const result = await db.query(
-      "SELECT lesson.id,lesson.title FROM lesson inner join courses on courses.id= lesson.course_id where courses.id=$1 and lesson.is_deleted = false;",
-      [courseID]
-    );
-    return result.rows;
-  } catch (err) {
-    throw err;
-  }
-};
-
-Course.lessonpage = async (lessonID) => {
-  try {
-    const result = await db.query(
-      "SELECT lesson.id,lesson.title,lesson.video,lesson.description FROM lesson where lesson.id=$1 and lesson.is_deleted = false;",
-      [lessonID]
-    );
-
-    return result.rows;
-  } catch (err) {
-    throw err;
-  }
-};
-
-module.exports = Course;
+User.findbyid = async (userID) => {
+    try {
+      const result = await db.query('SELECT * FROM users WHERE id = $1', [userID]);
+      return result[0]; 
+    } catch (err) {
+      throw err;
+    }
+  };
+module.exports = User;
