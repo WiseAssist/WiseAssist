@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import logo1 from "../assets/logo1.png";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import logo2 from "../assets/logo2.png";
 import { Link } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
 
 function Header() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const {isRegistered, isLoggedIn, login, logout } = useAuth();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -13,21 +17,59 @@ function Header() {
       <nav class=" relative bg-white  z-20 h-18 border-gray-200 py-2.5 dark:bg-gray-900  w-full ">
         <div class="flex  justify-between  px-4 mx-auto">
           <a href="/" class="flex items-center">
-            <img src={logo1} class="h-20 mr-3 sm:h-9" alt="WiseAssist Logo" />
-            <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              WiseAssist
-            </span>
+            <img src={logo2} class="h-14 w-48  " alt="WiseAssist Logo" />
           </a>
           <div class="flex items-center lg:order-2">
-            <div class="hidden mt-2 mr-4 sm:inline-block">
-              <span></span>
-            </div>
-
-            <Link
-              to="/signup"
-              class="text-white bg-indigo-950 hover:bg-indigo-900 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
+            <div
+              className={`${
+                isLoggedIn ? "hidden" : "flex"
+              }  ${
+                isRegistered ? "hidden" : "flex"
+              } flex-1  justify-end items-center align-center `}
             >
-              SignUp/Login
+              <Link to="/Login">
+                <button
+                  type="button"
+                  className="text-black hover:text-indigo-950 font-medium rounded-lg text-sm px-2 py-2.5 md:ml-1 md:px-10"
+                >
+                  Login
+                </button>
+              </Link>
+              <Link to="/signup">
+                <button
+                  type="button"
+                  className="shadow-sm shadow-[#292742] text-white bg-indigo-950 hover:bg-indigo-900 font-medium rounded-lg text-sm px-2 py-2.5 md:ml-1 md:px-10 "
+                >
+                  Sign Up
+                </button>
+              </Link>
+            </div>
+            <Link to="/profile">
+              <button
+                type="button"
+                className={`${
+                  isLoggedIn ? "flex" : "hidden"
+                } ${
+                  isRegistered ? "flex" : "hidden"
+                } flex-1  justify-end items-center align-center shadow-sm shadow-[#292742] text-white bg-indigo-950 hover:bg-indigo-900 font-medium rounded-lg text-sm px-2 py-2.5 md:ml-1 md:px-10 `}
+              >
+                Profile
+              </button>
+            </Link>
+            <Link to="/">
+              <button
+                onClick={() => {
+                  logout();
+                }}
+                type="button"
+                className={`${
+                  isLoggedIn ? "flex" : "hidden"
+                }  ${
+                  isRegistered ? "flex" : "hidden"
+                } flex-1  justify-end items-center align-center shadow-sm shadow-[#292742] text-white bg-indigo-950 hover:bg-indigo-900 font-medium rounded-lg text-sm px-2 py-2.5 md:ml-1 md:px-10 `}
+              >
+                Logout
+              </button>
             </Link>
             <button
               data-collapse-toggle="mobile-menu-2"
@@ -64,22 +106,18 @@ function Header() {
               </svg>
             </button>
           </div>
-          {/* <div
-            className={`absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent ${
-              isMobileMenuOpen ? "block" : "hidden"
-            }`}
-          ></div> */}
+
           <div
-            className={`lg:flex items-center ${
+            className={`lg:flex lg:items-center ${
               isMobileMenuOpen ? "block" : "hidden"
             }`}
             id="mobile-menu-2"
           >
-            <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+            <ul className="lg:flex lg:space-x-8 lg:mt-0 font-medium">
               <li>
                 <Link
                   to="/"
-                  class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-indigo-900 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
                   aria-current="page"
                 >
                   Home
@@ -88,7 +126,7 @@ function Header() {
 
               <li>
                 <Link
-                  href="/"
+                  to="/courses"
                   class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-indigo-900 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   Courses
@@ -127,28 +165,30 @@ function Header() {
                 </Link>
               </li>
               <li>
-                <button
-                  id="dropdownNavbarLink"
-                  data-dropdown-toggle="dropdownNavbar"
-                  class="flex items-center justify-between w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-indigo-900 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
-                >
-                  Language{" "}
-                  <svg
-                    class="w-2.5 h-2.5 ml-2.5"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
+                <Link to="/dashboard">
+                  <button
+                    id="dropdownNavbarLink"
+                    data-dropdown-toggle="dropdownNavbar"
+                    class="flex items-center justify-between w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-indigo-900 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
                   >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m1 1 4 4 4-4"
-                    />
-                  </svg>
-                </button>
+                    Language{" "}
+                    <svg
+                      class="w-2.5 h-2.5 ml-2.5"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 10 6"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m1 1 4 4 4-4"
+                      />
+                    </svg>
+                  </button>
+                </Link>
 
                 <div
                   id="dropdownNavbar"

@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import { Link } from "react-router-dom";
 
 function Techtip() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    <></>;
+  }, []);
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/posts");
+        const response = await axios.get("http://localhost:8080/alltechtips");
         setPosts(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -34,7 +39,7 @@ function Techtip() {
               >
                 <div
                   class="bg-indigo-950 flex items-center leading-none rounded-full text-gray-50 pt-1.5 pr-3 pb-1.5 pl-2
-              uppercase inline-block"
+              uppercase "
                 >
                   <p class="inline">
                     <svg
@@ -53,15 +58,42 @@ function Techtip() {
                   </p>
                   <p class="inline text-xs font-medium">New</p>
                 </div>
-                <a class="text-3xl font-bold leading-none lg:text-4xl xl:text-5xl">
+                <p class="text-3xl font-bold leading-none lg:text-4xl xl:text-5xl">
                   Empower Your Tech Journey:
                   <br /> Unleashing Expert Tips and Tricks
-                </a>
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="max-w-screen-xl mx-auto p-16">
+        <div class="sm:grid lg:grid-cols-3 sm:grid-cols-2 gap-10">
+          {posts.map((post, index) => (
+            <div
+              key={index}
+              class="hover:bg-indigo-950 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden border border-solid shadow-lg"
+            >
+              <div class="py-4 px-8">
+                <Link to={`/TipDetail/${post.id}`}>
+                  <button>
+                    <h4 class="text-lg mb-3 font-semibold">{post.title}</h4>
+                  </button>{" "}
+                </Link>
+                <p class="mb-2 text-sm text-gray-600">
+                  how to make the future better !!!!!{/* {post.short_detail} */}
+                </p>
+                <img src={post.image} class="w-full h-60" alt="" />
+                <hr class="mt-4" />
+                <span class="text-xs">ARTICLE</span>
+                &nbsp;<span class="text-xs text-gray-500">PROCESS</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* 
 
       <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
@@ -76,7 +108,7 @@ function Techtip() {
               >
                 <img
                   class="w-full h-full absolute top-0 start-0 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out rounded-xl"
-                  src="https://images.unsplash.com/photo-1542125387-c71274d94f0a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
+                  src={post.image}
                   alt="Im"
                 />
               </div>
@@ -85,9 +117,16 @@ function Techtip() {
                 <h3 class="text-xl font-semibold text-gray-800 group-hover:text-gray-600 dark:text-gray-200">
                   {post.title}
                 </h3>
-                <p class="mt-3 text-gray-800 dark:text-gray-200">{post.desc}</p>
+                <p class="mt-3 text-gray-800 dark:text-gray-200">
+                  {post.short_detail}
+                </p>
                 <p class="mt-5 inline-flex items-center gap-x-1 text-blue-600 decoration-2 group-hover:underline font-medium">
-                  Read more
+                  <Link to={`/TipDetail`}>
+                    <button class="mt-6 inline-block rounded-xl border-2 px-10 py-3 font-semibold border-white hover:bg-white hover:text-indigo-950">
+                      {" "}
+                      Read Now{" "}
+                    </button>
+                  </Link>
                   <svg
                     class="flex-shrink-0 w-4 h-4"
                     xmlns="http://www.w3.org/2000/svg"
@@ -107,8 +146,7 @@ function Techtip() {
             </a>
           ))}
         </div>
-      </div>
-
+      </div> */}
       <Footer />
     </>
   );

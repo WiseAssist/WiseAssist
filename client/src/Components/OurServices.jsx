@@ -1,109 +1,125 @@
-import React from "react";
+import React, { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 function OurServices() {
+  useEffect(() => {
+    AOS.init();
+  }, []);
   return (
-    <section>
-      <div
-        class=" text-indigo-950 py-8"
-        style={{ backgroundColor: "#F7F1EE " }}
-      >
-        <div class="container mx-auto  mb-10 flex flex-col items-start md:flex-row my-12 md:my-24">
-          <div class="flex flex-col w-full sticky md:top-36 lg:w-1/3 mt-2 md:mt-12 px-8">
-            <p class="text-3xl font-bold md:text-4xl leading-normal md:leading-relaxed mb-2">
-              Our Services
-            </p>
-            <p class="text-sm md:text-base text-indigo-950 mb-4">
-              Elevate your online presence with our comprehensive suite of
-              services. Our skilled team specializes in web development,
-              creating modern, responsive websites tailored to your unique
-              business needs.
-            </p>
-            <button class="bg-indigo-950 mr-auto hover:text-indigo-950 text-white rounded shadow hover:shadow-lg py-2 px-4 border text-indigo-950 hover:bg-white">
-              Explore Now
-            </button>
-          </div>
-          <div class="ml-0 md:ml-12 lg:w-2/3 sticky">
-            <div class="container mx-auto w-full h-full">
-              <div class="relative wrap overflow-hidden p-10 h-full">
-                <div
-                  class="border-2-2 border-yellow-555 absolute h-full border"
-                  style={{
-                    right: "50%",
-                    border: "2px solid #10184b",
-                    borderRadius: "1%",
-                  }}
-                ></div>
-                <div
-                  class="border-2-2 border-yellow-555 absolute h-full border"
-                  style={{
-                    right: "50%",
-                    border: "2px solid #10184b",
-                    borderRadius: "1%",
-                  }}
-                ></div>
-                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
-                  <div class="order-1 w-5/12"></div>
-                  <div class="order-1 w-5/12 px-1 py-4 text-right">
-                    <h4 class="mb-3 font-bold text-lg md:text-2xl">
-                      Digital Literacy Training
-                    </h4>
-                    <p class="text-sm md:text-base leading-snug text-indigo-950 text-opacity-100">
-                      Provide training and resources to improve digital
-                      literacy, covering topics like using social media, online
-                      shopping, and video conferencing.
-                    </p>
-                  </div>
+    <div class="container relative flex flex-col justify-between h-full max-w-6xl px-10 mx-auto xl:px-0 mt-5">
+      <h2 class="mb-1 text-3xl  text-center font-extrabold leading-tight text-gray-900">
+        Services
+      </h2>
+      <p class="mb-12 text-lg text-center text-gray-500">
+        Here is a few of the awesome Services we provide.
+      </p>
+      <div class="w-full" id="service">
+        <div class="flex flex-col w-full mb-10 sm:flex-row">
+          <div data-aos="fade-up" class="w-full mb-10 sm:mb-0 sm:w-1/2">
+            <div class="relative h-full ml-0 mr-0 sm:mr-10">
+              <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-indigo-500 rounded-lg"></span>
+              <div class="relative h-full p-5 bg-white border-2 border-indigo-500 rounded-lg">
+                <div class="flex items-center -mt-1">
+                  <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
+                    Tech Support and Troubleshooting
+                  </h3>
                 </div>
-                <div class="mb-8 flex justify-between items-center w-full right-timeline">
-                  <div class="order-1 w-5/12"></div>
-                  <div class="order-1  w-5/12 px-1 py-4 text-left">
-                    <h4 class="mb-3 font-bold text-lg md:text-2xl">
-                      Mobile Apps Assistance
-                    </h4>
-                    <p class="text-sm md:text-base leading-snug text-indigo-950 text-opacity-100">
-                      Help seniors install, use, and troubleshoot mobile
-                      applications, including health and wellness apps.
-                    </p>
-                  </div>
-                </div>
-                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
-                  <div class="order-1 w-5/12"></div>
-                  <div class="order-1 w-5/12 px-1 py-4 text-right">
-                    <h4 class="mb-3 font-bold text-lg md:text-2xl">
-                      Tech Workshops and Webinars
-                    </h4>
-                    <p class="text-sm md:text-base leading-snug text-indigo-950 text-opacity-100">
-                      Host online or in-person workshops and webinars to teach
-                      specific tech skills and answer user questions.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="mb-8 flex justify-between items-center w-full right-timeline">
-                  <div class="order-1 w-5/12"></div>
-
-                  <div class="order-1  w-5/12 px-1 py-4">
-                    <h4 class="mb-3 font-bold  text-lg md:text-2xl text-left">
-                      Community And Social interaction
-                    </h4>
-                    <p class="text-sm md:text-base leading-snug text-indigo-950 text-opacity-100">
-                      Foster a sense of community through forums, social groups,
-                      and connections with other seniors on similar tech
-                      journeys.
-                    </p>
-                  </div>
-                </div>
+                <p class="mt-3 mb-1 text-xs font-medium text-indigo-500 uppercase">
+                  ------------
+                </p>
+                <p class="mb-2 text-gray-600">
+                  Support sections or resources offering solutions and
+                  troubleshooting guides for common problems users face with
+                  their gadgets
+                </p>
               </div>
-              <img
-                class="mx-auto -mt-36 md:-mt-36"
-                src="https://user-images.githubusercontent.com/54521023/116968861-ef21a000-acd2-11eb-95ac-a34b5b490265.png"
-                alt=""
-              />
+            </div>
+          </div>
+          <div data-aos="fade-up" class="w-full sm:w-1/2">
+            <div class="relative h-full ml-0 md:mr-10">
+              <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-indigo-700 rounded-lg"></span>
+              <div class="relative h-full p-5 bg-white border-2 border-indigo-700 rounded-lg">
+                <div class="flex items-center -mt-1">
+                  <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
+                    Accessories and Add-ons
+                  </h3>
+                </div>
+                <p class="mt-3 mb-1 text-xs font-medium text-indigo-700 uppercase">
+                  ------------
+                </p>
+                <p class="mb-2 text-gray-600">
+                  Recommendations and information on accessories, peripherals,
+                  and add-ons that complement various gadgets, enhancing the
+                  user experience.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-aos="fade-up" class="flex flex-col w-full mb-5 sm:flex-row">
+          <div class="w-full mb-10 sm:mb-0 sm:w-1/2">
+            <div class="relative h-full ml-0 mr-0 sm:mr-10">
+              <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-indigo-800 rounded-lg"></span>
+              <div class="relative h-full p-5 bg-white border-2 border-indigo-800 rounded-lg">
+                <div class="flex items-center -mt-1">
+                  <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
+                    Search and Filter Tools
+                  </h3>
+                </div>
+                <p class="mt-3 mb-1 text-xs font-medium text-indigo-800 uppercase">
+                  ------------
+                </p>
+                <p class="mb-2 text-gray-600">
+                  Simple and effective search functionality with filters to
+                  narrow down gadget choices based on price, brand,
+                  specifications, etc
+                </p>
+              </div>
+            </div>
+          </div>
+          <div data-aos="fade-up" class="w-full mb-10 sm:mb-0 sm:w-1/2">
+            <div class="relative h-full ml-0 mr-0 sm:mr-10">
+              <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-indigo-900 rounded-lg"></span>
+              <div class="relative h-full p-5 bg-white border-2 border-indigo-900 rounded-lg">
+                <div class="flex items-center -mt-1">
+                  <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
+                    Newsletter Subscription
+                  </h3>
+                </div>
+                <p class="mt-3 mb-1 text-xs font-medium text-indigo-900 uppercase">
+                  ------------
+                </p>
+                <p class="mb-2 text-gray-600">
+                  Offering a newsletter that provides subscribers with the
+                  latest tech news, deals, and updates.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div data-aos="fade-up" class="w-full sm:w-1/2">
+            <div class="relative h-full ml-0 md:mr-10">
+              <span class="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-indigo-950 rounded-lg"></span>
+              <div class="relative h-full p-5 bg-white border-2 border-indigo-950 rounded-lg">
+                <div class="flex items-center -mt-1">
+                  <h3 class="my-2 ml-3 text-lg font-bold text-gray-800">
+                    Deals and Discounts
+                  </h3>
+                </div>
+                <p class="mt-3 mb-1 text-xs font-medium text-indigo-950 uppercase">
+                  ------------
+                </p>
+                <p class="mb-2 text-gray-600">
+                  Highlighting special deals, discounts, and offers on gadgets
+                  from various retailers or e-commerce platforms. This helps
+                  users find good deals on their desired gadgets.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 

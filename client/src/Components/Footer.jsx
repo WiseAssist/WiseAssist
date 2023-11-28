@@ -1,5 +1,5 @@
 import React from "react";
-import logo1 from "../assets/logo1.png";
+import logo2 from "../assets/logo2.png";
 import { Link } from "react-router-dom";
 
 function Footer() {
@@ -9,10 +9,7 @@ function Footer() {
         <div class="md:flex md:justify-between">
           <div class="mb-6 md:mb-0 flex flex-col  ">
             <a href="/" class="flex ">
-              <img src={logo1} class="h-8 mr-3" alt="WiseAssist Logo" />
-              <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                WiseAssist
-              </span>
+              <img src={logo2} class="h-18 w-48  " alt="WiseAssist Logo" />
             </a>
             {/* <p>Who we are?</p>
             <p>

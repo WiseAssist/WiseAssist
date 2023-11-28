@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { Link } from "react-router-dom";
 
 function Subscribe() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    <></>;
+  }, []);
   return (
     <>
       <Header />

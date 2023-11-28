@@ -2,10 +2,18 @@ import React, { useState } from "react";
 import axios from "axios";
 import background from "../assets/background.png";
 import FormHeader from "../Components/FormHeader";
+// import Cookies from "js-cookie";
+import {useCookies} from "react-cookie";
 import Header from "../Components/Header";
-import Footer from "../Components/Footer";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
 
 function RegisterPage() {
+  const [cookies, setCookie] = useCookies(['token']);
+  useState(() => {
+        window.scrollTo(0, 0);
+      }, []);
+  const { isLoggedIn, login, logout ,register} = useAuth();
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -13,8 +21,8 @@ function RegisterPage() {
     email: "",
     password: "",
     confirm_password: "",
-    phone_number: "",
-    birthDate: "",
+    phonenumber: "",
+    birthdate: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -23,37 +31,53 @@ function RegisterPage() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const validateForm = () => {
-    let errors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email || !emailRegex.test(formData.email)) {
-      errors.email = "Invalid email address";
-    }
+  // const validateForm = () => {
+  //   let errors = {};
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (!formData.email || !emailRegex.test(formData.email)) {
+  //     errors.email = "Invalid email address";
+  //   }
 
-    if (!formData.password || formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters long";
-    }
-    const jordanianPhoneNumberRegex = /^\+9627[789]\d{7}$/;
+  //   if (!formData.password || formData.password.length < 8) {
+  //     errors.password = "Password must be at least 8 characters long";
+  //   }
+  //   const jordanianPhoneNumberRegex = /^\+9627[789]\d{7}$/;
 
-    if (!jordanianPhoneNumberRegex.test(formData.phone_number)) {
-      errors.phone_number = "Not a valid Jordanian phone number";
-    }
+  //   if (!jordanianPhoneNumberRegex.test(formData.phonenumber)) {
+  //     errors.phonenumber = "Not a valid Jordanian phone number";
+  //   }
 
-    return Object.keys(errors).length === 0;
-  };
-
+  //   return Object.keys(errors).length === 0;
+  // };
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    // eslint-disable-next-line no-lone-blocks
+    {
       try {
+        
         const response = await axios.post(
-          "http://localhost:5000/users/signup",
+          "http://localhost:8080/register",
           formData
         );
-        console.log(response.data.message);
+        const token = response.data.token;
+       
+
+        console.log("User registered successfully!");
+        setCookie('Token', token, { path: '/' });
+              navigate("/");
       } catch (error) {
         console.error("Error registering user:", error);
-        setErrors(error.response.data.errors);
+
+        if (error.response) {
+          console.error("Server responded with status:", error.response.status);
+          console.error("Response data:", error.response.data);
+          setErrors(error.response.data.errors);
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+        } else {
+          console.error("Error setting up the request:", error.message);
+        }
       }
     }
   };
@@ -119,18 +143,18 @@ function RegisterPage() {
                       <input
                         type="text"
                         name="user_name"
-                        id="username"
+                        id="user_name"
                         value={formData.user_name}
                         onChange={handleInputChange}
                         class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-900 focus:border-indigo-900 focus:z-10 sm:text-sm"
                         placeholder="username"
                         required=""
                       />
-                      {errors.username && (
-                        <p className="text-red-500 text-xs mt-1">
+                      {/* {errors.user_name && (
+                        <p className="text-red-500 tex t-xs mt-1">
                           {errors.user_name}
                         </p>
-                      )}
+                      )} */}
                     </div>
 
                     <div>
@@ -150,36 +174,36 @@ function RegisterPage() {
                         placeholder="name@company.com"
                         required=""
                       />
-                      {errors.email && (
+                      {/* {errors.email && (
                         <p className="text-red-500 text-xs mt-1">
                           {errors.email}
                         </p>
-                      )}
+                      )} */}
                     </div>
                     <div>
                       <label
-                        for="phone"
+                        for="phonenumber"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
                         Phone number
                       </label>
                       <input
                         type="tel"
-                        id="phone"
-                        name="phone_number"
-                        value={formData.phone_number}
+                        id="phonenumber"
+                        name="phonenumber"
+                        value={formData.phonenumber}
                         onChange={handleInputChange}
                         class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-900 focus:border-indigo-900 focus:z-10 sm:text-sm"
                         placeholder="+962799999999"
                         required
                       />
-                      {errors.phone_number && (
+                      {/* {errors.phonenumber && (
                         <p className="text-red-500 text-xs mt-1">
-                          {errors.phone_number}
+                          {errors.phonenumber}
                         </p>
-                      )}
+                      )} */}
                     </div>
-
+                    {/* 
                     <div class="relative max-w-sm">
                       <label class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Birth Date
@@ -198,13 +222,13 @@ function RegisterPage() {
                       <input
                         datepicker
                         type="text"
-                        name="birthDate"
-                        value={formData.birthDate}
+                        name="birthdate"
+                        value={formData.birthdate}
                         onChange={handleInputChange}
                         class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-900 focus:border-indigo-900 focus:z-10 sm:text-sm"
                         placeholder="Select date"
                       />
-                    </div>
+                    </div> */}
 
                     <div>
                       <label
@@ -223,11 +247,11 @@ function RegisterPage() {
                         class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-900 focus:border-indigo-900 focus:z-10 sm:text-sm"
                         required=""
                       />
-                      {errors.password && (
+                      {/* {errors.password && (
                         <p className="text-red-500 text-xs mt-1">
                           {errors.password}
                         </p>
-                      )}
+                      )} */}
                     </div>
                     <div>
                       <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -243,11 +267,11 @@ function RegisterPage() {
                         class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-900 focus:border-indigo-900 focus:z-10 sm:text-sm"
                         required=""
                       />
-                      {errors.confirm_password && (
+                      {/* {errors.confirm_password && (
                         <p className="text-red-500 text-xs mt-1">
                           {errors.confirm_password}
                         </p>
-                      )}
+                      )} */}
                     </div>
                     <button
                       type="submit"
@@ -264,9 +288,7 @@ function RegisterPage() {
           </section>
         </div>
       </div>
-      <Footer />
     </>
   );
 }
-
 export default RegisterPage;

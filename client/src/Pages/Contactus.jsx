@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import contact from "../assets/contact.jpg";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import Faq from "../Components/Faq";
 
 function Contactus() {
+  const [isSignIn, setSignin] = useState(false);
+  const [isAdmin, setAdmin] = useState(false);
   return (
     <>
-      <Header />
+      <Header
+        setSignin={setSignin}
+        setAdmin={setAdmin}
+        isAdmin={isAdmin}
+        isSignIn={isSignIn}
+      />
       <div
         className="w-full dark:bg-gray-500"
         style={{

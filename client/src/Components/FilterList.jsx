@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function FilterList() {
+function FilterList({ filterByDate }) {
   const [openSort, setOpenSort] = useState(false);
   const [sortType, setSortType] = useState("Sort by");
 
@@ -14,8 +14,13 @@ function FilterList() {
       <div className="w-full flex justify-center">
         <div className="relative">
           <button
-            onClick={() => setOpenSort(!openSort)}
-            className="flex text-white mx-auto bg-indigo-950 items-center justify-center w-38 py-3 mt-3 text-sm font-semibold text-left  rounded-lg"
+            onClick={() => {
+              filterByDate("Date");
+              handleSortClick(sortType);
+            }}
+            className={` ${
+              sortType !== "Date" ? "" : "hidden"
+            }flex text-indigo-950 mx-auto bg-white items-center justify-center w-38 py-4 mt-3 text-sm font-semibold text-left  rounded-lg`}
           >
             <span>{sortType}</span>
             <svg
@@ -44,17 +49,6 @@ function FilterList() {
                   >
                     <div>
                       <p className="font-semibold">Date</p>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => handleSortClick("Price")}
-                    className={`flex flex-row items-start rounded-lg bg-transparent p-2 hover:bg-gray-200 ${
-                      sortType !== "Price" ? "" : "hidden"
-                    }`}
-                  >
-                    <div>
-                      <p className="font-semibold">Price</p>
                     </div>
                   </button>
                 </div>
