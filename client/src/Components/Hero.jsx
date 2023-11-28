@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import hero from "../assets/hero.jpg";
+// import hero from "../assets/hero.jpg";
 import hero1 from "../assets/hero1.png";
 
 function Hero() {
@@ -25,18 +25,13 @@ function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4 text-center">
-            <Link to="/tech">
+            <Link to="">
               <button className="block w-full rounded bg-indigo-950 px-12 py-3 text-sm font-medium text-white shadow hover:bg-indigo-900 focus:outline-none focus:ring active:bg-indigo-900 sm:w-auto">
                 Get Started
               </button>
             </Link>
           </div>
         </div>
-        {/* <img
-          class="object-cover relative w-1/2  h-full max-w-2xl  rounded-full "
-          src={hero}
-          alt=""
-        /> */}
       </div>
     </section>
   );

@@ -1,55 +1,54 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import background from "../assets/background.png";
 import FormHeader from "../Components/FormHeader";
 import Header from "../Components/Header";
-import Footer from "../Components/Footer";
+import { useAuth } from "../Context/AuthContext";
 
 const LoginPage = () => {
+  const { isLoggedIn, login, logout } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-  const history = useNavigate();
-  const validateForm = () => {
-    let errors = {};
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email || !emailRegex.test(formData.email)) {
-      errors.email = "Invalid email address";
-    }
-
-    if (!formData.password || formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters long";
-    }
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/users/signin",
-          formData
-        );
-        history("/");
-        console.log(response.data.message);
-      } catch (error) {
-        console.error("Error logging in:", error);
-        setErrors(error.response.data.errors);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/login",
+        formData
+      );
+      const { token } = response.data || {};
+      if (token) {
+        Cookies.set("Token", token);
+        login();
+        console.log("Login successful", response.data);
+        navigate("/");
+      } else {
+        console.error("Token not found in response");
       }
+
+      // Handle successful login
+    } catch (error) {
+      console.error("Error logging in", error);
+      // Handle login error
+      alert("Password or Email wrong");
     }
   };
+  // const handleButtonClick = () => {};
 
   return (
     <>
@@ -62,7 +61,7 @@ const LoginPage = () => {
         }}
       >
         <div className="max-w-md w-full space-y-8">
-          <section class="bg-gray-50 dark:bg-gray-900">
+          <section className="bg-gray-50 dark:bg-gray-900">
             <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
               <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <div class="flex flex-col  px-6 py-8 mx-auto  lg:py-0">
@@ -72,7 +71,7 @@ const LoginPage = () => {
                     linkName="Signup"
                     linkUrl="/signup"
                   />
-                  <form class="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                  <form class="space-y-4 md:space-y-6" onSubmit={handleLogin}>
                     <div>
                       <label
                         for="email"
@@ -90,11 +89,11 @@ const LoginPage = () => {
                         placeholder="name@gmail.com"
                         required=""
                       />
-                      {errors.email && (
+                      {/* {errors.email && (
                         <p className="text-red-500 text-xs mt-1">
                           {errors.email}
                         </p>
-                      )}
+                      )} */}
                     </div>
                     <div>
                       <label
@@ -113,11 +112,11 @@ const LoginPage = () => {
                         class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-900 focus:border-indigo-900 focus:z-10 sm:text-sm"
                         required=""
                       />
-                      {errors.password && (
+                      {/* {errors.password && (
                         <p className="text-red-500 text-xs mt-1">
                           {errors.password}
                         </p>
-                      )}
+                      )} */}
                     </div>
                     <div class="flex items-center justify-between">
                       <div class="flex items-start">
@@ -155,7 +154,6 @@ const LoginPage = () => {
           </section>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

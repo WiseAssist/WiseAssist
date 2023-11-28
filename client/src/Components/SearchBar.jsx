@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
-function SearchBar() {
+function SearchBar({ onSearch }) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSearch(searchTerm);
+  };
   return (
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="  overflow-hidden bg-white px-6 py-20 text-center sm:px-16 sm:shadow-sm ">
@@ -9,7 +19,7 @@ function SearchBar() {
           <br /> Dive into Cutting-edge Tech Workshops
         </p>
 
-        <form action="/search">
+        <form onSubmit={handleSubmit}>
           <label
             class="mx-auto mt-8 relative bg-white min-w-sm max-w-2xl flex flex-col md:flex-row items-center justify-center border py-2 px-2 rounded-2xl gap-2 shadow-xl focus-within:border-gray-300"
             for="search-bar"
@@ -18,6 +28,7 @@ function SearchBar() {
               id="search-bar"
               placeholder="your keyword here"
               name="q"
+              onChange={handleInputChange}
               class="px-6 py-2 w-full rounded-md flex-1 outline-none bg-white"
               required=""
             />
