@@ -232,14 +232,15 @@ Dashboard.createcourse = async (title,detail,description,trainer,start_time,end_
 
     Dashboard.updatecourse = async (courseID, title, detail, description, trainer, start_time,end_time, category_id, site) => {
       try {
-        const result = await db.query('UPDATE courses SET title=$2, detail=$3, description=$4, start_time=$5,end_time=$6, trainer=$7, category_id=$8, site=$9 WHERE id=$1', [courseID, title, detail, description, start_time,end_time, trainer, category_id, site]);
-    
-        return result.rows;
-      } catch (err) {
-        throw err;
+        const result = await db.query('UPDATE courses SET title = $2, detail = $3, description = $4, trainer = $5, start_time = $6, end_time = $7, category_id = $8, site = $9 WHERE id = $1 RETURNING *',
+        [courseID, title, detail, description, trainer, start_time, end_time, category_id, site]);
+      
+      return result.rows[0];
+
+      } catch (error) {
+        throw error;
       }
-    };
-    
+    }
 
       Dashboard.deletecourse = async (courseID) => {
         try {
