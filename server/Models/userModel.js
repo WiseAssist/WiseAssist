@@ -36,7 +36,7 @@ User.checkUserExistence = async (email, user_name, phonenumber) => {
 
 User.login = async (email) => {
     try {
-      const user = await db.query('SELECT users.id, email,user_name, roles.role  FROM users inner join roles on roles.id = users.role_id WHERE email = $1 And users.is_deleted= false;', [email]);
+      const user = await db.query('SELECT users.id, email,user_name,password, roles.role  FROM users inner join roles on roles.id = users.role_id WHERE email = $1 And users.is_deleted= false;', [email]);
       if (user.rows[0]) {
         return user.rows[0];
       } else {
