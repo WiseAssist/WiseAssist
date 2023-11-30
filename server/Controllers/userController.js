@@ -68,19 +68,17 @@ const register = async (req, res) => {
   };
   
   const login = async (req, res) => {
-    const { email } = req.body;
+    const { email,password  } = req.body;
   
     try {
       const user = await User.login(email);
-      console.log(user);
-      
-      if (user.length>0) {
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+      if (!user || user.is_deleted || !isPasswordMatch) {
         return res.status(401).json({ success: false, message: 'Invalid email or password' });
       }
-  
+      
+
       console.log(user.id);
-      console.log(user.role);
-     
       const token = jwt.sign({ userId: user.id,username:user.user_name, email: user.email,role:user.role }, process.env.SECRET_KEY, { expiresIn: '4h' });
       res.cookie('token', token, { httpOnly: true });
       res.status(200).json({ success: true, message: 'Successfully signed in', token });
@@ -89,7 +87,6 @@ const register = async (req, res) => {
       res.status(500).json({ success: false, message: 'Internal server error' });
     }
   };
-
   
 
   const createCheckoutSession = async (req, res) => {
