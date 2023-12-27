@@ -542,9 +542,15 @@ const login = async (req, res) => {
   try {
     const user = await Dashboard.login(email);
 
+    if (!user || !user.password) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Email not found or user is denied to access." });
+    }
+
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
-    if (!user || !isPasswordMatch) {
+    if (!isPasswordMatch) {
       return res
         .status(401)
         .json({ success: false, message: "Invalid email or password" });
@@ -575,6 +581,7 @@ const login = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
 
 const allusers = async (req, res) => {
   try {
