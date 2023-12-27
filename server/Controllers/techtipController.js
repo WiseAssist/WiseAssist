@@ -8,6 +8,7 @@ const { admin } = require('../firebase');
 const alltechtips = async (req, res, next) => {
 
 try {
+   // const userID = req.user.userId
     const course = await Techtip.alltechtips();
 
 
