@@ -30,8 +30,7 @@ Home.allelderliescourses = async () => {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
+            day: 'numeric'
           });
 
           
@@ -42,8 +41,7 @@ Home.allelderliescourses = async () => {
               weekday: 'long',
               year: 'numeric',
               month: 'long',
-              day: 'numeric',
-              hour: 'numeric',
+              day: 'numeric'
             });
           }
           
